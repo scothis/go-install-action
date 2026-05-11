@@ -1,0 +1,39 @@
+name: "go-install-action"
+description: "Install a go package"
+inputs:
+  package:
+    description: go package to install
+    required: true
+  version:
+    description: version of go package to install
+outputs:
+  path:
+    description: Path to the installed package binary
+    value: ${{ steps.install.outputs.path }}
+
+runs:
+  using: "composite"
+  steps:
+  - name: install ${{ inputs.package }}
+    id: install
+    run: |
+      set -euo pipefail
+
+      package="${{ inputs.package }}"
+      version="${{ inputs.version }}"
+      gobin="$(go env GOBIN)"
+      gopath="$(go env GOPATH)"
+
+      cmd="${package}"
+      if [[ "${version}" != "" ]] ; then
+        cmd="${cmd}@${version}"
+      fi
+
+      go install ${cmd}
+
+      path="${gobin:-${gopath}/bin}/$(basename "${package}")"
+      [ -f "${path}" ]
+
+      echo "installed to: ${path}"
+      echo "path=${path}" >> "${GITHUB_OUTPUT}"
+    shell: bash

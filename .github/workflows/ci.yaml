@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+    branches:
+    - '**'
+    - '!dependabot/**'
+    tags:
+    - '**'
+  pull_request: {}
+
+jobs:
+  test:
+    name: Test go-install action
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+        - os: ubuntu-24.04
+          version: latest
+        - os: ubuntu-24.04-arm
+          version: latest
+        # git tag
+        - version: v0.20.0
+        # git commit
+        - version: d36047ae385302d20acd872e28f036a475fb9417
+    runs-on: ${{ matrix.os || 'ubuntu-latest' }}
+    steps:
+    - uses: actions/checkout@v6
+    - name: Install package
+      id: install
+      uses: ./
+      with:
+        package: ${{ matrix.package || 'github.com/google/go-containerregistry/cmd/crane' }}
+        version: ${{ matrix.version }}
+    - name: Test install
+      run: ${{ steps.install.outputs.path }} ${{ matrix['test-args'] || 'version' }}
