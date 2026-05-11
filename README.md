@@ -27,6 +27,10 @@ See [action.yml](action.yml)
     # The go package's version to install.
     # Default: none
     version: ''
+    # Optional modfile.
+    # Path to a go.mod file that defines the version for the package.
+    # Default: none
+    modfile: ''
 ```
 <!-- end usage -->
 
