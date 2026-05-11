@@ -29,7 +29,6 @@ runs:
 
       cmd=""
       if [[ "${modfile}" != "" ]] ; then
-        -modfile hack/stern/go.mod
         cmd="${cmd:+${cmd} }-modfile ${modfile}"
       fi
       cmd="${cmd:+${cmd} }${package}"
@@ -37,7 +36,9 @@ runs:
         cmd="${cmd}@${version}"
       fi
 
-      go install ${cmd}
+      echo "#[group]go install ${cmd}"
+        go install ${cmd}
+      echo "##[endgroup]"
 
       path="${gobin:-${gopath}/bin}/$(basename "${package}")"
       [ -f "${path}" ]
