@@ -24,6 +24,7 @@ jobs:
         - version: v0.20.0
         # git commit
         - version: d36047ae385302d20acd872e28f036a475fb9417
+        - modfile: hack/crane/go.mod
     runs-on: ${{ matrix.os || 'ubuntu-latest' }}
     steps:
     - uses: actions/checkout@v6
@@ -33,5 +34,6 @@ jobs:
       with:
         package: ${{ matrix.package || 'github.com/google/go-containerregistry/cmd/crane' }}
         version: ${{ matrix.version }}
+        modfile: ${{ matrix.modfile }}
     - name: Test install
       run: ${{ steps.install.outputs.path }} ${{ matrix['test-args'] || 'version' }}
