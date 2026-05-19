@@ -18,8 +18,10 @@ jobs:
         include:
         - os: ubuntu-24.04
           version: latest
+          toolchain: auto
         - os: ubuntu-24.04-arm
           version: latest
+          toolchain: auto
         - version: "v0.20.0" # git tag
         - version: "d36047ae385302d20acd872e28f036a475fb9417" # git commit
           cache-enabled: 'true'
@@ -48,6 +50,7 @@ jobs:
       with: &with-install
         package: ${{ matrix.package || 'github.com/google/go-containerregistry/cmd/crane' }}
         version: ${{ matrix.version }}
+        toolchain: ${{ matrix.toolchain }}
         working-directory: ${{ matrix.working-directory }}
         output: ${{ matrix.output }}
         output-dir: ${{ matrix.output-dir }}
